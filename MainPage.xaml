@@ -1,0 +1,170 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Odev_1.MainPage">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="15">
+
+            <!-- Uygulama Başlığı -->
+            <Label 
+                Text="MAAŞ HESAPLAMA SİSTEMİ"
+                FontSize="22"
+                FontAttributes="Bold"
+                HorizontalTextAlignment="Center"
+                TextColor="DarkBlue" />
+
+            <!-- BÖLÜM 1: ÇALIŞAN BİLGİLERİ -->
+            <Label 
+                Text="1. Çalışan Bilgileri" 
+                FontSize="18" 
+                FontAttributes="Bold" 
+                TextColor="DarkMagenta" />
+
+            <!-- Kişinin Adı Soyadı -->
+            <Label Text="Çalışan Adı Soyadı:" />
+            <Entry 
+                x:Name="entAd"
+                Placeholder="Lütfen adınızı ve soyadınızı giriniz..."
+                PlaceholderColor="Gray"
+                Keyboard="Plain"
+                TextTransform="Uppercase"
+                ClearButtonVisibility="WhileEditing" />
+
+            <!-- İşçinin Statüsü (Stepper ile) -->
+            <Label Text="İşçinin Statüsü (Kıdem Seviyesi 1-4):" />
+            <HorizontalStackLayout Spacing="15">
+                <Stepper 
+                    x:Name="stpStatu"
+                    Minimum="1"
+                    Maximum="4"
+                    Increment="1"
+                    Value="1"
+                    ValueChanged="stpStatu_ValueChanged" />
+
+                <Label 
+                    x:Name="lblStatu"
+                    Text="Seviye 1: Stajyer / Çırak (%0 Bonus)"
+                    VerticalTextAlignment="Center"
+                    FontAttributes="Bold" />
+            </HorizontalStackLayout>
+
+            <!-- BÖLÜM 2: MAAŞ, TATİL VE MESAİ BİLGİLERİ -->
+            <Label 
+                Text="2. Çalışma ve Ücret Bilgileri" 
+                FontSize="18" 
+                FontAttributes="Bold" 
+                TextColor="DarkMagenta" />
+
+            <!-- Günlük Maaş (Yevmiye) -->
+            <Label Text="Günlük Maaş / Yevmiye (TL):" />
+            <Entry 
+                x:Name="entGunlukMaas"
+                Placeholder="Örn: 1000"
+                Keyboard="Numeric"
+                ClearButtonVisibility="WhileEditing" />
+
+            <!-- Tatil Gün Sayısı (Slider ve Stepper Birlikte Kullanımı) -->
+            <Label 
+                x:Name="lblTatilBilgi"
+                Text="Tatil Gün Sayısı: 4 Gün (Çalışılan: 26 Gün)"
+                FontAttributes="Bold" />
+
+            <Grid ColumnDefinitions="*, Auto" ColumnSpacing="10">
+                <Slider 
+                    x:Name="sldTatil"
+                    Grid.Column="0"
+                    Minimum="0"
+                    Maximum="30"
+                    Value="4"
+                    MinimumTrackColor="Green"
+                    MaximumTrackColor="LightGray"
+                    ThumbColor="DarkGreen"
+                    VerticalOptions="Center"
+                    ValueChanged="sldTatil_ValueChanged" />
+
+                <Stepper 
+                    x:Name="stpTatil"
+                    Grid.Column="1"
+                    Minimum="0"
+                    Maximum="30"
+                    Increment="1"
+                    Value="4"
+                    ValueChanged="stpTatil_ValueChanged" />
+            </Grid>
+
+            <!-- Aylık Fazla Mesai Saati (Slider ile) -->
+            <Label 
+                x:Name="lblMesaiSaat"
+                Text="Aylık Fazla Mesai Süresi: 0 Saat"
+                FontAttributes="Bold" />
+            <Slider 
+                x:Name="sldMesaiSaat"
+                Minimum="0"
+                Maximum="100"
+                Value="0"
+                MinimumTrackColor="Orange"
+                MaximumTrackColor="LightGray"
+                ThumbColor="DarkOrange"
+                ValueChanged="sldMesaiSaat_ValueChanged" />
+
+            <!-- Saatlik Mesai Ücreti -->
+            <Label Text="Saatlik Mesai Ücreti (TL):" />
+            <Entry 
+                x:Name="entMesaiUcreti"
+                Placeholder="Örn: 150"
+                Keyboard="Numeric"
+                ClearButtonVisibility="WhileEditing" />
+
+            <!-- BÖLÜM 3: HESAPLA BUTONU VE SONUÇ TABLOSU -->
+            <Button 
+                x:Name="btnHesapla"
+                Text="MAAŞI HESAPLA"
+                FontSize="18"
+                FontAttributes="Bold"
+                BackgroundColor="DarkBlue"
+                TextColor="White"
+                CornerRadius="10"
+                BorderColor="Black"
+                BorderWidth="1"
+                Clicked="btnHesapla_Clicked" />
+
+            <Label 
+                Text="3. Maaş Bordrosu (Sonuçlar)" 
+                FontSize="18" 
+                FontAttributes="Bold" 
+                TextColor="DarkMagenta" />
+
+            <!-- Sonuçları Göstereceğimiz Grid (6 Satır, 2 Sütun) - Sıralı Renk Düzeni -->
+            <Grid RowDefinitions="*,*,*,*,*,*" ColumnDefinitions="*,*" RowSpacing="8" ColumnSpacing="10" Padding="12" BackgroundColor="#1E1E1E">
+
+                <!-- 1. ÇALIŞAN ADI -->
+                <Label Text="Çalışan Adı:" Grid.Row="0" Grid.Column="0" FontAttributes="Bold" TextColor="White" />
+                <Label x:Name="lblSonucAd" Text="-" Grid.Row="0" Grid.Column="1" FontAttributes="Bold" TextColor="Cyan" />
+
+                <!-- 2. STATÜ / ÇALIŞILAN GÜN -->
+                <Label Text="Statü / Gün:" Grid.Row="1" Grid.Column="0" FontAttributes="Bold" TextColor="White" />
+                <Label x:Name="lblSonucStatuGun" Text="-" Grid.Row="1" Grid.Column="1" FontAttributes="Bold" TextColor="HotPink" />
+
+                <!-- 3. YEVMİYE TOPLAMI -->
+                <Label Text="Yevmiye Toplamı:" Grid.Row="2" Grid.Column="0" FontAttributes="Bold" TextColor="White" />
+                <Label x:Name="lblSonucYevmiye" Text="0 TL" Grid.Row="2" Grid.Column="1" FontAttributes="Bold" TextColor="Yellow" />
+
+                <!-- 4. STATÜ BONUSU -->
+                <Label Text="Statü Bonusu:" Grid.Row="3" Grid.Column="0" FontAttributes="Bold" TextColor="White" />
+                <Label x:Name="lblSonucBonus" Text="0 TL" Grid.Row="3" Grid.Column="1" FontAttributes="Bold" TextColor="LightGreen" />
+
+                <!-- 5. MESAİ TOPLAMI -->
+                <Label Text="Mesai Toplamı:" Grid.Row="4" Grid.Column="0" FontAttributes="Bold" TextColor="White" />
+                <Label x:Name="lblSonucMesai" Text="0 TL" Grid.Row="4" Grid.Column="1" FontAttributes="Bold" TextColor="Orange" />
+
+                <!-- 6. NET TOPLAM MAAŞ -->
+                <Label Text="NET TOPLAM MAAŞ:" Grid.Row="5" Grid.Column="0" FontAttributes="Bold" TextColor="LightGreen" FontSize="16" />
+                <Label x:Name="lblSonucToplam" Text="0 TL" Grid.Row="5" Grid.Column="1" FontAttributes="Bold" TextColor="LightSkyBlue" FontSize="18" />
+
+            </Grid>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>
